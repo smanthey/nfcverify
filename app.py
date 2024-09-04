@@ -2,17 +2,17 @@ from flask import Flask, request
 
 app = Flask(__name__)
 
-# Main route
-@app.route('/')
-def home():
-    return 'Hello, this is your Flask app on Heroku!'
+# List of valid NFC tag UIDs for verification
+valid_tag_uids = {
+    "04:63:1A:F5": "Verified Tag"  # Replace this with your NFC tag UID
+}
 
-# Route to handle NFC tag verification
-@app.route('/nfc_verify/<tag_id>')
-def nfc_verify(tag_id):
-    # Simple logic to verify NFC tag
-    if tag_id == "12345":  # Simulated tag ID
-        return "NFC Tag Verified!"
+@app.route('/nfc_verify')
+def nfc_verify():
+    uid = request.args.get('uid')  # Get the UID from the URL query parameter
+    
+    if uid in valid_tag_uids:
+        return f"NFC Tag Verified for {valid_tag_uids[uid]}"
     else:
         return "Verification Failed!"
 
